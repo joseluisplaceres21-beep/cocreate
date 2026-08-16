@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CoCreate - Encuentra Colaboraciones</title>
+  <title>CoCreate - Red de Creadores</title>
   <style>
     :root {
-      --bg-dark: #0a0a0a;
+      --bg-dark: #0f1015;
       --accent: #ccff00;
       --text: #ffffff;
-      --card-bg: #141414;
+      --card-bg: #181920;
+      --border: #2a2b36;
     }
     body {
       background-color: var(--bg-dark);
@@ -22,13 +23,17 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px;
-      border-bottom: 1px solid #222;
+      padding: 20px 30px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 16, 21, 0.9);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
     .logo {
-      font-weight: bold;
+      font-weight: 800;
       font-size: 1.5rem;
-      color: var(--text);
+      letter-spacing: -0.5px;
     }
     .logo span {
       color: var(--accent);
@@ -37,166 +42,126 @@
       background-color: var(--accent);
       color: #000;
       border: none;
-      padding: 10px 20px;
-      font-weight: bold;
-      border-radius: 20px;
+      padding: 10px 22px;
+      font-weight: 700;
+      border-radius: 30px;
       cursor: pointer;
+      transition: opacity 0.2s;
     }
+    .btn-publish:hover { opacity: 0.9; }
     .hero {
-      padding: 40px 20px;
+      padding: 50px 20px;
       text-align: center;
+      background: linear-gradient(180deg, rgba(204,255,0,0.03) 0%, rgba(15,16,21,0) 100%);
     }
     .hero h1 {
-      font-size: 2.5rem;
+      font-size: 2.8rem;
       margin-bottom: 10px;
+      letter-spacing: -1px;
     }
     .hero h1 span {
       color: var(--accent);
     }
+    .hero p {
+      color: #999;
+      font-size: 1.05rem;
+    }
     .container {
-      max-width: 800px;
+      max-width: 700px;
       margin: 0 auto;
       padding: 20px;
     }
     .project-card {
       background-color: var(--card-bg);
-      border: 1px solid #222;
-      border-radius: 12px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
       overflow: hidden;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
     .card-banner {
-      height: 90px;
+      height: 120px;
       background-size: cover;
       background-position: center;
       background-color: #222;
     }
     .card-body {
-      padding: 20px;
-      position: relative;
+      padding: 24px;
     }
     .card-profile-row {
       display: flex;
       align-items: center;
       gap: 15px;
-      margin-top: -45px;
+      margin-top: -55px;
       margin-bottom: 15px;
     }
     .card-avatar {
-      width: 70px;
-      height: 70px;
+      width: 75px;
+      height: 75px;
       border-radius: 50%;
-      border: 3px solid var(--card-bg);
+      border: 4px solid var(--card-bg);
       object-fit: cover;
       background-color: #333;
     }
     .card-actions {
       display: flex;
       gap: 10px;
-      margin-top: 15px;
+      margin-top: 20px;
       flex-wrap: wrap;
     }
     .btn-action {
       background: transparent;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      padding: 6px 14px;
-      border-radius: 15px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 20px;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 600;
       font-size: 0.85rem;
+      transition: all 0.2s;
     }
-    .btn-action.rate { border-color: #ffaa00; color: #ffaa00; }
-    .btn-action.report { border-color: #ff4444; color: #ff4444; font-size: 0.75rem; }
-
-    /* Sección de Comentarios */
-    .comments-section {
-      margin-top: 15px;
-      border-top: 1px solid #222;
-      padding-top: 15px;
-    }
-    .comment-item {
-      font-size: 0.85rem;
-      background: #1a1a1a;
-      padding: 8px 12px;
-      border-radius: 6px;
-      margin-bottom: 8px;
-    }
-    .comment-form {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-    }
-    .comment-form input {
-      flex: 1;
-      background: #1a1a1a;
-      border: 1px solid #333;
-      padding: 8px;
-      color: #fff;
-      border-radius: 6px;
-      font-size: 0.85rem;
-    }
-    .comment-form button {
-      background: var(--accent);
-      border: none;
-      padding: 0 12px;
-      font-weight: bold;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.85rem;
-    }
-
+    .btn-action:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-action.report { border-color: #552222; color: #ff6b6b; }
+    
     /* Modales */
     .modal {
       display: none;
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(5px);
       justify-content: center;
       align-items: center;
       z-index: 1000;
     }
     .modal-content {
-      background: #181818;
+      background: #14151b;
       padding: 30px;
-      border-radius: 12px;
+      border-radius: 20px;
       width: 90%;
-      max-width: 400px;
-      border: 1px solid #333;
+      max-width: 450px;
+      border: 1px solid var(--border);
     }
     .modal-content input, .modal-content select, .modal-content textarea {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-bottom: 15px;
-      background: #222;
-      border: 1px solid #444;
+      background: #0f1015;
+      border: 1px solid var(--border);
       color: #fff;
-      border-radius: 6px;
+      border-radius: 10px;
       box-sizing: border-box;
+      font-family: inherit;
     }
-    /* Chat Flotante */
-    #chatWidget {
-      display: none;
-      position: fixed;
-      bottom: 20px; right: 20px;
-      width: 350px; height: 450px;
-      background: #121212;
-      border: 1px solid #333;
-      border-radius: 12px;
-      flex-direction: column;
-      z-index: 1001;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    .modal-content input:focus, .modal-content textarea:focus {
+      border-color: var(--accent);
+      outline: none;
     }
-    .chat-header {
-      background: #1f1f1f; padding: 12px 15px; border-top-left-radius: 12px; border-top-right-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-weight: bold;
+    .loading-state, .error-state {
+      text-align: center;
+      padding: 40px;
+      color: #777;
     }
-    .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-    .message-bubble { max-width: 75%; padding: 10px; border-radius: 8px; font-size: 0.9rem; word-break: break-word; }
-    .message-bubble.incoming { background: #222; align-self: flex-start; }
-    .message-bubble.outgoing { background: #25d366; color: #000; align-self: flex-end; }
-    .chat-input-area { padding: 10px; background: #1f1f1f; display: flex; gap: 8px; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
-    .chat-input-area input { flex: 1; background: #2a2a2a; border: none; padding: 10px; color: #fff; border-radius: 6px; }
-    .chat-input-area button { background: var(--accent); border: none; padding: 0 15px; font-weight: bold; border-radius: 6px; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -208,64 +173,35 @@
 
   <div class="hero">
     <h1>Crea. Conecta. <span>Colabora.</span></h1>
-    <p>Perfiles, videos de YouTube, chat privado y comentarios en comunidad.</p>
+    <p>La plataforma para creadores de contenido y videojugadores.</p>
   </div>
 
-  <div class="container" id="projectsGrid"></div>
+  <div class="container" id="projectsGrid">
+    <div class="loading-state">Cargando publicaciones...</div>
+  </div>
 
   <!-- Modal Publicar -->
   <div id="modalPublish" class="modal">
     <div class="modal-content">
-      <h3>Crear Publicación</h3>
+      <h3 style="margin-top:0;">Crear Publicación</h3>
       <form id="projectForm" onsubmit="submitProject(event)">
-        <input type="text" id="inputUser" placeholder="Tu usuario o canal (ej: @tu_nombre)" required>
+        <input type="text" id="inputUser" placeholder="Tu nombre o canal" required>
         <input type="text" id="inputAvatar" placeholder="URL de tu foto de perfil (Imagen)" required>
         <input type="text" id="inputBanner" placeholder="URL de tu imagen de Banner" required>
         <textarea id="inputBio" placeholder="Breve biografía..." rows="2" required></textarea>
-        <hr style="border-color:#333; margin:15px 0;">
-        <input type="text" id="inputTitle" placeholder="Título de tu proyecto o búsqueda" required>
+        <hr style="border-color:var(--border); margin:15px 0;">
+        <input type="text" id="inputTitle" placeholder="Título de tu proyecto o video" required>
         <input type="text" id="inputVideo" placeholder="Link de YouTube (ej: https://youtube.com/watch?v=...)">
         <select id="inputCategory">
+          <option value="Gaming & Free Fire">Gaming & Free Fire</option>
           <option value="Cine & Video">Cine & Video</option>
           <option value="Música">Música</option>
-          <option value="Gaming">Gaming</option>
           <option value="Tech">Tech</option>
         </select>
-        <textarea id="inputDesc" placeholder="Describe los detalles..." rows="3" required></textarea>
-        <button type="submit" class="btn-publish" style="width:100%;">Publicar</button>
-        <button type="button" onclick="toggleModal('modalPublish', false)" style="background:none; border:none; color:#aaa; width:100%; margin-top:10px; cursor:pointer;">Cancelar</button>
+        <textarea id="inputDesc" placeholder="Describe lo que buscas colaborar..." rows="3" required></textarea>
+        <button type="submit" class="btn-publish" style="width:100%; margin-top:5px;">Publicar ahora</button>
+        <button type="button" onclick="toggleModal('modalPublish', false)" style="background:none; border:none; color:#777; width:100%; margin-top:15px; cursor:pointer;">Cancelar</button>
       </form>
-    </div>
-  </div>
-
-  <!-- Modal Calificar -->
-  <div id="modalRate" class="modal">
-    <div class="modal-content">
-      <h3 id="rateTitle">Calificar a Usuario</h3>
-      <form onsubmit="submitRating(event)">
-        <select id="inputStars">
-          <option value="5">⭐⭐⭐⭐⭐ (5 Estrellas)</option>
-          <option value="4">⭐⭐⭐⭐ (4 Estrellas)</option>
-          <option value="3">⭐⭐⭐ (3 Estrellas)</option>
-          <option value="2">⭐⭐ (2 Estrellas)</option>
-          <option value="1">⭐ (1 Estrella)</option>
-        </select>
-        <button type="submit" class="btn-action" style="width:100%; background:var(--accent); color:#000; border:none; padding:10px; margin-top:10px; font-weight:bold;">Enviar Calificación</button>
-        <button type="button" onclick="toggleModal('modalRate', false)" style="background:none; border:none; color:#aaa; width:100%; margin-top:10px; cursor:pointer;">Cancelar</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Chat -->
-  <div id="chatWidget">
-    <div class="chat-header">
-      <span id="chatHeaderTitle">Chat</span>
-      <button onclick="closeChat()" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.2rem;">&times;</button>
-    </div>
-    <div class="chat-messages" id="chatMessages"></div>
-    <div class="chat-input-area">
-      <input type="text" id="chatInput" placeholder="Escribe un mensaje..." onkeypress="if(event.key==='Enter') sendMessage()">
-      <button onclick="sendMessage()">Enviar</button>
     </div>
   </div>
 
@@ -276,16 +212,8 @@
     const SUPABASE_KEY = 'sb_publishable_zQ0xEAPIznA06JoJjRuaQ_SZib1rJt';
     const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    let currentTargetUser = '';
-
     function toggleModal(modalId, show) {
       document.getElementById(modalId).style.display = show ? 'flex' : 'none';
-    }
-
-    function openRateModal(user) {
-      currentTargetUser = user;
-      document.getElementById('rateTitle').innerText = `Calificar a ${user}`;
-      toggleModal('modalRate', true);
     }
 
     async function submitProject(e) {
@@ -313,28 +241,10 @@
       }
     }
 
-    async function submitRating(e) {
-      e.preventDefault();
-      const stars = parseInt(document.getElementById('inputStars').value);
-      const addedPoints = stars * 10;
-      const { data: proj } = await supabase.from('projects').select('*').eq('user', currentTargetUser).limit(1);
-      
-      if (proj && proj.length > 0) {
-        const newPoints = (proj[0].points || 0) + addedPoints;
-        const { error } = await supabase.from('projects').update({ points: newPoints, rating: stars }).eq('user', currentTargetUser);
-        if (!error) {
-          alert(`¡Calificación enviada! +${addedPoints} puntos.`);
-          toggleModal('modalRate', false);
-          loadProjects();
-        }
-      }
-    }
-
     async function deleteProject(id) {
-      if (confirm("¿Estás seguro de reportar y eliminar esta publicación?")) {
+      if (confirm("¿Estás seguro de eliminar esta publicación?")) {
         const { error } = await supabase.from('projects').delete().eq('id', id);
         if (!error) {
-          alert("Publicación eliminada por reporte.");
           loadProjects();
         } else {
           alert("Error al eliminar: " + error.message);
@@ -342,133 +252,58 @@
       }
     }
 
-    async function addComment(projectId) {
-      const input = document.getElementById(`commentInput-${projectId}`);
-      const text = input.value.trim();
-      if (!text) return;
-
-      const { error } = await supabase.from('comments').insert([{ project_id: projectId, text, author: 'Usuario' }]);
-      if (!error) {
-        input.value = '';
-        loadProjects();
-      }
-    }
-
     async function loadProjects() {
-      const { data: projects, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
-      const { data: comments } = await supabase.from('comments').select('*');
+      const grid = document.getElementById('projectsGrid');
+      const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
 
-      if (!error && projects) {
-        const grid = document.getElementById('projectsGrid');
-        grid.innerHTML = '';
-        projects.forEach(p => {
-          const userPoints = p.points || 10;
-          const userRating = '⭐'.repeat(p.rating || 5);
-          const bannerUrl = p.banner || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600';
-          const avatarUrl = p.avatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=' + p.user;
+      if (error) {
+        grid.innerHTML = `<div class="error-state">Error al conectar con la base de datos.<br><small>${error.message}</small></div>`;
+        return;
+      }
 
-          // Procesar Video de YouTube
-          let videoEmbed = '';
-          if (p.video_link) {
-            let videoId = '';
-            if (p.video_link.includes('v=')) {
-              videoId = p.video_link.split('v=')[1].split('&')[0];
-            } else if (p.video_link.includes('youtu.be/')) {
-              videoId = p.video_link.split('youtu.be/')[1].split('?')[0];
-            }
-            if (videoId) {
-              videoEmbed = `<iframe width="100%" height="220" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen style="border-radius:8px; margin-top:10px;"></iframe>`;
-            }
+      if (!data || data.length === 0) {
+        grid.innerHTML = `<div class="loading-state">No hay publicaciones todavía. ¡Sé el primero en publicar arriba!</div>`;
+        return;
+      }
+
+      grid.innerHTML = '';
+      data.forEach(p => {
+        let videoEmbed = '';
+        if (p.video_link) {
+          let videoId = '';
+          if (p.video_link.includes('v=')) {
+            videoId = p.video_link.split('v=')[1].split('&')[0];
+          } else if (p.video_link.includes('youtu.be/')) {
+            videoId = p.video_link.split('youtu.be/')[1].split('?')[0];
           }
+          if (videoId) {
+            videoEmbed = `<iframe width="100%" height="200" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen style="border-radius:10px; margin-top:12px;"></iframe>`;
+          }
+        }
 
-          // Filtrar comentarios de este proyecto
-          const projectComments = comments ? comments.filter(c => c.project_id === p.id) : [];
-          let commentsHtml = '';
-          projectComments.forEach(c => {
-            commentsHtml += `<div class="comment-item"><b>${c.author}:</b> ${c.text}</div>`;
-          });
-
-          grid.innerHTML += `
-            <div class="project-card">
-              <div class="card-banner" style="background-image: url('${bannerUrl}');"></div>
-              <div class="card-body">
-                <div class="card-profile-row">
-                  <img src="${avatarUrl}" class="card-avatar">
-                  <div>
-                    <div style="font-weight:bold; font-size:1.1rem; color:var(--text);">${p.user}</div>
-                    <div style="font-size:0.8rem; color:#aaa;">${p.bio || 'Creador'}</div>
-                  </div>
-                  <div style="margin-left:auto; text-align:right;">
-                    <span style="font-size:0.85rem; background:#222; padding:3px 8px; border-radius:6px; color:#ffaa00;">${userRating} (${userPoints} pts)</span>
-                  </div>
+        grid.innerHTML += `
+          <div class="project-card">
+            <div class="card-banner" style="background-image: url('${p.banner || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600'}');"></div>
+            <div class="card-body">
+              <div class="card-profile-row">
+                <img src="${p.avatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=' + p.user}" class="card-avatar">
+                <div>
+                  <div style="font-weight:700; font-size:1.05rem; color:var(--text);">${p.user}</div>
+                  <div style="font-size:0.8rem; color:#888;">${p.bio || 'Creador de contenido'}</div>
                 </div>
-                <span style="background:#1a1a1a; border:1px solid #333; padding:2px 8px; font-size:0.75rem; border-radius:4px; color:#aaa;">${p.category}</span>
-                <h3 style="margin:10px 0 5px 0;">${p.title}</h3>
-                ${videoEmbed}
-                <p style="color:#aaa; font-size:0.9rem; margin-top:10px;">${p.desc}</p>
-                
-                <div class="card-actions">
-                  <button class="btn-action" onclick="openChat('${p.user}')">Contactar Chat</button>
-                  <button class="btn-action rate" onclick="openRateModal('${p.user}')">⭐ Calificar</button>
-                  <button class="btn-action report" onclick="deleteProject(${p.id})">Reportar / Borrar</button>
-                </div>
-
-                <!-- Sección de Comentarios -->
-                <div class="comments-section">
-                  <div style="font-size:0.85rem; font-weight:bold; margin-bottom:5px; color:#ccc;">Comentarios:</div>
-                  <div id="commentsList-${p.id}">
-                    ${commentsHtml || '<div style="font-size:0.8rem; color:#666;">No hay comentarios aún. ¡Sé el primero!</div>'}
-                  </div>
-                  <div class="comment-form">
-                    <input type="text" id="commentInput-${p.id}" placeholder="Escribe un comentario..." onkeypress="if(event.key==='Enter') addComment(${p.id})">
-                    <button onclick="addComment(${p.id})">Comentar</button>
-                  </div>
-                </div>
-
+              </div>
+              <span style="background:#0f1015; border:1px solid var(--border); padding:3px 10px; font-size:0.75rem; border-radius:6px; color:#aaa;">${p.category || 'General'}</span>
+              <h3 style="margin:12px 0 6px 0; font-size:1.2rem;">${p.title}</h3>
+              ${videoEmbed}
+              <p style="color:#aaa; font-size:0.92rem; line-height:1.4; margin-top:10px;">${p.desc}</p>
+              
+              <div class="card-actions">
+                <button class="btn-action report" onclick="deleteProject(${p.id})">Eliminar</button>
               </div>
             </div>
-          `;
-        });
-      }
-    }
-
-    // Chat
-    let activeChatUser = '';
-    function openChat(user) {
-      activeChatUser = user;
-      document.getElementById('chatHeaderTitle').innerText = `Chat con ${user}`;
-      document.getElementById('chatWidget').style.display = 'flex';
-      loadMessages();
-    }
-    function closeChat() { document.getElementById('chatWidget').style.display = 'none'; }
-
-    async function loadMessages() {
-      const { data, error } = await supabase.from('messages').select('*').order('created_at', { ascending: true });
-      const container = document.getElementById('chatMessages');
-      container.innerHTML = '';
-      if (!error && data) {
-        data.forEach(m => {
-          const isMe = m.sender === 'Tú';
-          container.innerHTML += `
-            <div class="message-bubble ${isMe ? 'outgoing' : 'incoming'}">
-              <div style="font-size:0.7rem; opacity:0.7;">${m.sender}</div>
-              ${m.text}
-            </div>
-          `;
-        });
-        container.scrollTop = container.scrollHeight;
-      }
-    }
-
-    async function sendMessage() {
-      const input = document.getElementById('chatInput');
-      const text = input.value.trim();
-      if (!text) return;
-      const { error } = await supabase.from('messages').insert([{ sender: 'Tú', text, recipient: activeChatUser }]);
-      if (!error) {
-        input.value = '';
-        loadMessages();
-      }
+          </div>
+        `;
+      });
     }
 
     loadProjects();
