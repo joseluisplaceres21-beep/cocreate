@@ -3,30 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CoCreate - Buscador de Colaboraciones para Creadores</title>
+  <title>CoCreate - Encuentra Colaboradores</title>
   <style>
     :root {
       --bg-dark: #0a0b0d;
       --card-bg: #13151a;
+      --card-hover: #1a1d24;
       --accent-green: #ccff00;
       --accent-hover: #b3e600;
       --text-main: #ffffff;
       --text-muted: #9a9faf;
       --border-color: #222630;
+      --tag-bg: #1e222d;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
     body {
       background-color: var(--bg-dark);
       color: var(--text-main);
       line-height: 1.5;
-      padding-bottom: 60px;
     }
 
     /* HEADER */
@@ -34,7 +35,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 15px 20px;
+      padding: 16px 20px;
       border-bottom: 1px solid var(--border-color);
       position: sticky;
       top: 0;
@@ -44,8 +45,9 @@
     }
 
     .logo {
-      font-weight: 800;
-      font-size: 1.4rem;
+      font-weight: 900;
+      font-size: 1.3rem;
+      letter-spacing: -0.5px;
     }
 
     .logo span {
@@ -60,12 +62,20 @@
       border-radius: 20px;
       border: none;
       cursor: pointer;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+      transform: translateY(-1px);
     }
 
     /* HERO */
     .hero {
-      padding: 40px 20px;
+      padding: 40px 20px 30px;
+      max-width: 800px;
+      margin: 0 auto;
       text-align: left;
     }
 
@@ -73,18 +83,20 @@
       display: inline-block;
       background: rgba(204, 255, 0, 0.1);
       color: var(--accent-green);
-      padding: 4px 12px;
+      padding: 5px 12px;
       border-radius: 12px;
       font-size: 0.8rem;
+      font-weight: 600;
       margin-bottom: 15px;
       border: 1px solid rgba(204, 255, 0, 0.2);
     }
 
     .hero h1 {
-      font-size: 2.8rem;
+      font-size: 2.6rem;
       line-height: 1.1;
       font-weight: 900;
       margin-bottom: 15px;
+      letter-spacing: -1px;
     }
 
     .hero h1 span {
@@ -93,49 +105,166 @@
 
     .hero p {
       color: var(--text-muted);
-      font-size: 1rem;
+      font-size: 0.95rem;
       margin-bottom: 25px;
     }
 
-    /* PASOS */
-    .steps {
+    /* FILTROS */
+    .section-container {
+      max-width: 900px;
+      margin: 0 auto;
       padding: 20px;
     }
 
-    .step-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 20px;
+    .filters-header {
       margin-bottom: 15px;
     }
 
-    .step-num {
-      color: var(--accent-green);
-      font-size: 0.8rem;
-      font-weight: bold;
-      margin-bottom: 5px;
+    .filters-header h2 {
+      font-size: 1.3rem;
+      font-weight: 800;
     }
 
-    .step-card h3 {
-      font-size: 1.2rem;
-      margin-bottom: 8px;
+    .filters {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
     }
 
-    .step-card p {
+    .filter-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
       color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .filter-btn.active, .filter-btn:hover {
+      background: var(--accent-green);
+      color: #000;
+      border-color: var(--accent-green);
+      font-weight: 700;
+    }
+
+    /* FEED DE TARJETAS DE PROYECTOS */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .project-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .project-card:hover {
+      border-color: var(--accent-green);
+      background: var(--card-hover);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .creator-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
       font-size: 0.85rem;
     }
 
-    /* MODAL FORMULARIO */
+    .creator-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .category-badge {
+      background: var(--tag-bg);
+      color: var(--accent-green);
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 8px;
+      font-weight: 600;
+      border: 1px solid rgba(204, 255, 0, 0.15);
+    }
+
+    .project-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .project-desc {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .post-time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .btn-connect {
+      background: transparent;
+      border: 1px solid var(--accent-green);
+      color: var(--accent-green);
+      padding: 5px 12px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-connect:hover {
+      background: var(--accent-green);
+      color: #000;
+    }
+
+    /* MODAL */
     .modal-overlay {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
       z-index: 1000;
       justify-content: center;
       align-items: center;
@@ -145,8 +274,8 @@
     .modal-content {
       background: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 25px;
+      border-radius: 18px;
+      padding: 24px;
       width: 100%;
       max-width: 450px;
       position: relative;
@@ -154,46 +283,50 @@
 
     .close-btn {
       position: absolute;
-      top: 15px;
-      right: 15px;
-      background: none;
-      border: none;
+      top: 15px; right: 15px;
+      background: none; border: none;
       color: var(--text-muted);
       font-size: 1.2rem;
       cursor: pointer;
     }
 
     .form-group {
-      margin-bottom: 15px;
+      margin-bottom: 14px;
     }
 
     .form-group label {
       display: block;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
       margin-bottom: 5px;
     }
 
     .form-group input, .form-group select, .form-group textarea {
       width: 100%;
-      padding: 12px;
-      background: #000;
+      padding: 10px;
+      background: #08090b;
       border: 1px solid var(--border-color);
       border-radius: 8px;
       color: #fff;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--accent-green);
     }
 
     .btn-submit {
       width: 100%;
       background: var(--accent-green);
       color: #000;
-      font-weight: bold;
+      font-weight: 800;
       padding: 12px;
       border-radius: 8px;
       border: none;
       cursor: pointer;
-      margin-top: 10px;
+      font-size: 0.9rem;
+      margin-top: 8px;
     }
   </style>
 </head>
@@ -201,67 +334,117 @@
 
   <header>
     <div class="logo">CoCreate<span>.</span></div>
-    <button class="btn-primary" onclick="toggleModal(true)">Publicar Proyecto</button>
+    <button class="btn-primary" onclick="toggleModal(true)">+ Publicar</button>
   </header>
 
   <section class="hero">
-    <div class="badge">⚡ La comunidad #1 para pequeños creadores</div>
+    <div class="badge">⚡ La comunidad #1 para creadores independientes</div>
     <h1>Crea.<br>Conecta.<br><span>Colabora.</span></h1>
-    <p>CoCreate es la plataforma donde pequeños creadores y proyectos independientes encuentran su próxima gran colaboración.</p>
+    <p>Encuentra editores, diseñadores, músicos o co-hosts para hacer crecer tus proyectos juntos.</p>
     <button class="btn-primary" onclick="toggleModal(true)">Publicar mi proyecto -></button>
   </section>
 
-  <section class="steps">
-    <div class="step-card">
-      <div class="step-num">01</div>
-      <h3>Publica</h3>
-      <p>Crea tu perfil o sube tu proyecto. Muestra quién eres y qué buscas exactamente.</p>
+  <section class="section-container">
+    <div class="filters-header">
+      <h2>Oportunidades <span>Activas</span></h2>
     </div>
 
-    <div class="step-card">
-      <div class="step-num">02</div>
-      <h3>Descubre</h3>
-      <p>Explora creadores y proyectos por nicho, plataforma o habilidades.</p>
+    <div class="filters">
+      <button class="filter-btn active" onclick="filterProjects('todos', this)">Todos</button>
+      <button class="filter-btn" onclick="filterProjects('cine', this)">Cine & Video</button>
+      <button class="filter-btn" onclick="filterProjects('musica', this)">Música</button>
+      <button class="filter-btn" onclick="filterProjects('gaming', this)">Gaming</button>
+      <button class="filter-btn" onclick="filterProjects('tecnologia', this)">Tech</button>
     </div>
 
-    <div class="step-card">
-      <div class="step-num">03</div>
-      <h3>Conecta</h3>
-      <p>Envía un mensaje directo, comparte ideas y construyan algo increíble juntos.</p>
+    <div class="projects-grid" id="projectsGrid">
+      
+      <div class="project-card" data-category="cine">
+        <div>
+          <div class="card-top">
+            <div class="creator-info">
+              <div class="avatar">M</div>
+              <span class="creator-name">@mateo_vlogs</span>
+            </div>
+            <span class="category-badge">Cine & Video</span>
+          </div>
+          <h3 class="project-title">Busco Editor para Reels / Shorts</h3>
+          <p class="project-desc">Tengo canal de viajes. Busco un editor dinámico para cortar ritmos rápido. ¡Ofrezco créditos y participación!</p>
+        </div>
+        <div class="card-footer">
+          <span class="post-time">Hace 1 hora</span>
+          <button class="btn-connect" onclick="alert('Conectando con @mateo_vlogs')">Contactar</button>
+        </div>
+      </div>
+
+      <div class="project-card" data-category="musica">
+        <div>
+          <div class="card-top">
+            <div class="creator-info">
+              <div class="avatar" style="background:#00e5ff;">S</div>
+              <span class="creator-name">@sofia_beats</span>
+            </div>
+            <span class="category-badge">Música</span>
+          </div>
+          <h3 class="project-title">Productora busca Cantante Pop/Indie</h3>
+          <p class="project-desc">Tengo maquetas producidas en Ableton. Busco voz masculina o femenina para colaboraciones en Spotify.</p>
+        </div>
+        <div class="card-footer">
+          <span class="post-time">Hace 3 horas</span>
+          <button class="btn-connect" onclick="alert('Conectando con @sofia_beats')">Contactar</button>
+        </div>
+      </div>
+
+      <div class="project-card" data-category="gaming">
+        <div>
+          <div class="card-top">
+            <div class="creator-info">
+              <div class="avatar" style="background:#ff0055; color:#fff;">G</div>
+              <span class="creator-name">@gamer_zone</span>
+            </div>
+            <span class="category-badge">Gaming</span>
+          </div>
+          <h3 class="project-title">Co-host para Podcast de Videojuegos</h3>
+          <p class="project-desc">Buscamos un apasionado del gaming para grabar un podcast semanal en Twitch y Spotify.</p>
+        </div>
+        <div class="card-footer">
+          <span class="post-time">Hace 1 día</span>
+          <button class="btn-connect" onclick="alert('Conectando con @gamer_zone')">Contactar</button>
+        </div>
+      </div>
+
     </div>
   </section>
 
   <div class="modal-overlay" id="modalForm">
     <div class="modal-content">
       <button class="close-btn" onclick="toggleModal(false)">✕</button>
-      <h3 style="margin-bottom: 5px;">Nuevo Proyecto</h3>
-      <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 20px;">Publica tu oferta para encontrar colaboradores.</p>
+      <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 4px;">Nuevo Proyecto</h3>
+      <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 16px;">Publica tu oferta para que otros creadores te contacten.</p>
       
-      <form onsubmit="handleSubmit(event)">
+      <form onsubmit="addNewProject(event)">
         <div class="form-group">
-          <label>Tu Nombre / Canal</label>
-          <input type="text" placeholder="Ej. @foto_creator" required />
+          <label>Tu Usuario / Red Social</label>
+          <input type="text" id="inputUser" placeholder="Ej. @tu_canal" required />
         </div>
         <div class="form-group">
-          <label>Título del Proyecto</label>
-          <input type="text" placeholder="Ej. Busco editor para Podcast de Video" required />
+          <label>Título de la Colaboración</label>
+          <input type="text" id="inputTitle" placeholder="Ej. Busco diseñador de miniaturas" required />
         </div>
         <div class="form-group">
-          <label>Nicho Principal</label>
-          <select required>
-            <option value="">Selecciona un nicho</option>
-            <option value="musica">Música & Audio</option>
-            <option value="moda">Moda & Estilo</option>
-            <option value="tecnologia">Tecnología</option>
+          <label>Categoría</label>
+          <select id="inputCategory" required>
             <option value="cine">Cine & Video</option>
+            <option value="musica">Música</option>
             <option value="gaming">Gaming</option>
+            <option value="tecnologia">Tech</option>
           </select>
         </div>
         <div class="form-group">
-          <label>En qué consiste?</label>
-          <textarea rows="3" placeholder="Describe brevemente la colaboración que buscas..." required></textarea>
+          <label>Descripción corta</label>
+          <textarea id="inputDesc" rows="3" placeholder="Describe brevemente lo que buscas..." required></textarea>
         </div>
-        <button type="submit" class="btn-submit">Publicar Ahora</button>
+        <button type="submit" class="btn-submit">🚀 Publicar Ahora</button>
       </form>
     </div>
   </div>
@@ -271,12 +454,61 @@
       document.getElementById('modalForm').style.display = show ? 'flex' : 'none';
     }
 
-    function handleSubmit(e) {
+    function filterProjects(cat, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cards = document.querySelectorAll('.project-card');
+      cards.forEach(card => {
+        if (cat === 'todos' || card.getAttribute('data-category') === cat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function addNewProject(e) {
       e.preventDefault();
-      alert('¡Proyecto publicado con éxito!');
+      
+      const user = document.getElementById('inputUser').value;
+      const title = document.getElementById('inputTitle').value;
+      const category = document.getElementById('inputCategory').value;
+      const desc = document.getElementById('inputDesc').value;
+
+      const categoryMap = {
+        'cine': 'Cine & Video',
+        'musica': 'Música',
+        'gaming': 'Gaming',
+        'tecnologia': 'Tech'
+      };
+
+      const initial = user.replace('@','').charAt(0).toUpperCase() || 'C';
+
+      const newCardHTML = `
+        <div class="project-card" data-category="${category}">
+          <div>
+            <div class="card-top">
+              <div class="creator-info">
+                <div class="avatar">${initial}</div>
+                <span class="creator-name">${user}</span>
+              </div>
+              <span class="category-badge">${categoryMap[category]}</span>
+            </div>
+            <h3 class="project-title">${title}</h3>
+            <p class="project-desc">${desc}</p>
+          </div>
+          <div class="card-footer">
+            <span class="post-time">Hace un momento</span>
+            <button class="btn-connect" onclick="alert('Conectando con ${user}')">Contactar</button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('projectsGrid').insertAdjacentHTML('afterbegin', newCardHTML);
       toggleModal(false);
+      e.target.reset();
     }
   </script>
 </body>
-  </html>
-  
+</html>
