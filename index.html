@@ -509,6 +509,31 @@
       toggleModal(false);
       e.target.reset();
     }
-  </script>
+  // Asegúrate de usar tus claves reales de Supabase
+  const SUPABASE_URL = 'https://nzbyrngykzcswojuplqs.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_zQOxECKIznAO6JoJJIRuaQ_SZib1rJt';
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  async function submitProject() {
+    const title = document.getElementById('proj-title').value;
+    const category = document.getElementById('proj-cat').value;
+    const desc = document.getElementById('proj-desc').value;
+
+    const { data, error } = await supabase
+      .from('projects')
+      .insert([{ title, category, desc }]);
+    
+    if (error) {
+      alert('Error al publicar: ' + error.message);
+    } else {
+      alert('¡Proyecto publicado con éxito!');
+      // Limpiar formulario
+      document.getElementById('proj-title').value = '';
+      document.getElementById('proj-cat').value = '';
+      document.getElementById('proj-desc').value = '';
+    }
+  }
+</script>
+  
 </body>
 </html>
