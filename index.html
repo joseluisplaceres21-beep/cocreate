@@ -1,544 +1,477 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CoCreate - Encuentra Colaboradores</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CoCreate - Encuentra Colaboraciones</title>
   <style>
     :root {
-      --bg-dark: #0a0b0d;
-      --card-bg: #13151a;
-      --card-hover: #1a1d24;
-      --accent-green: #ccff00;
-      --accent-hover: #b3e600;
-      --text-main: #ffffff;
-      --text-muted: #9a9faf;
-      --border-color: #222630;
-      --tag-bg: #1e222d;
+      --bg-dark: #0a0a0a;
+      --accent: #ccff00;
+      --text: #ffffff;
+      --card-bg: #141414;
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-
     body {
       background-color: var(--bg-dark);
-      color: var(--text-main);
-      line-height: 1.5;
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
     }
-
-    /* HEADER */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border-color);
-      position: sticky;
-      top: 0;
-      background: rgba(10, 11, 13, 0.9);
-      backdrop-filter: blur(10px);
-      z-index: 100;
+      padding: 20px;
+      border-bottom: 1px solid #222;
     }
-
     .logo {
-      font-weight: 900;
-      font-size: 1.3rem;
-      letter-spacing: -0.5px;
+      font-weight: bold;
+      font-size: 1.5rem;
+      color: var(--text);
     }
-
     .logo span {
-      color: var(--accent-green);
+      color: var(--accent);
     }
-
-    .btn-primary {
-      background-color: var(--accent-green);
+    .btn-publish {
+      background-color: var(--accent);
       color: #000;
-      font-weight: 700;
-      padding: 10px 18px;
-      border-radius: 20px;
       border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      border-radius: 20px;
       cursor: pointer;
-      font-size: 0.85rem;
-      transition: transform 0.2s, background-color 0.2s;
     }
-
-    .btn-primary:hover {
-      background-color: var(--accent-hover);
-      transform: translateY(-1px);
-    }
-
-    /* HERO */
     .hero {
-      padding: 40px 20px 30px;
-      max-width: 800px;
-      margin: 0 auto;
-      text-align: left;
+      padding: 40px 20px;
+      text-align: center;
     }
-
-    .badge {
-      display: inline-block;
-      background: rgba(204, 255, 0, 0.1);
-      color: var(--accent-green);
-      padding: 5px 12px;
-      border-radius: 12px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin-bottom: 15px;
-      border: 1px solid rgba(204, 255, 0, 0.2);
-    }
-
     .hero h1 {
-      font-size: 2.6rem;
-      line-height: 1.1;
-      font-weight: 900;
-      margin-bottom: 15px;
-      letter-spacing: -1px;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
     }
-
     .hero h1 span {
-      color: var(--accent-green);
+      color: var(--accent);
     }
-
-    .hero p {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-      margin-bottom: 25px;
-    }
-
-    /* FILTROS */
-    .section-container {
-      max-width: 900px;
+    .container {
+      max-width: 800px;
       margin: 0 auto;
       padding: 20px;
     }
-
-    .filters-header {
+    .project-card {
+      background-color: var(--card-bg);
+      border: 1px solid #222;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 25px;
+    }
+    .card-banner {
+      height: 90px;
+      background-size: cover;
+      background-position: center;
+      background-color: #222;
+    }
+    .card-body {
+      padding: 20px;
+      position: relative;
+    }
+    .card-profile-row {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-top: -45px;
       margin-bottom: 15px;
     }
-
-    .filters-header h2 {
-      font-size: 1.3rem;
-      font-weight: 800;
+    .card-avatar {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: 3px solid var(--card-bg);
+      object-fit: cover;
+      background-color: #333;
     }
-
-    .filters {
+    .card-actions {
       display: flex;
       gap: 10px;
-      overflow-x: auto;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
+      margin-top: 15px;
+      flex-wrap: wrap;
     }
-
-    .filter-btn {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      color: var(--text-muted);
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 0.8rem;
+    .btn-action {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 6px 14px;
+      border-radius: 15px;
       cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
-
-    .filter-btn.active, .filter-btn:hover {
-      background: var(--accent-green);
-      color: #000;
-      border-color: var(--accent-green);
-      font-weight: 700;
-    }
-
-    /* FEED DE TARJETAS DE PROYECTOS */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
-    }
-
-    .project-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      transition: transform 0.2s, border-color 0.2s;
-    }
-
-    .project-card:hover {
-      border-color: var(--accent-green);
-      background: var(--card-hover);
-    }
-
-    .card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-
-    .creator-info {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--accent-green);
-      color: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       font-weight: bold;
       font-size: 0.85rem;
     }
+    .btn-action.rate { border-color: #ffaa00; color: #ffaa00; }
+    .btn-action.report { border-color: #ff4444; color: #ff4444; font-size: 0.75rem; }
 
-    .creator-name {
+    /* Sección de Comentarios */
+    .comments-section {
+      margin-top: 15px;
+      border-top: 1px solid #222;
+      padding-top: 15px;
+    }
+    .comment-item {
       font-size: 0.85rem;
-      font-weight: 600;
+      background: #1a1a1a;
+      padding: 8px 12px;
+      border-radius: 6px;
+      margin-bottom: 8px;
     }
-
-    .category-badge {
-      background: var(--tag-bg);
-      color: var(--accent-green);
-      font-size: 0.7rem;
-      padding: 3px 8px;
-      border-radius: 8px;
-      font-weight: 600;
-      border: 1px solid rgba(204, 255, 0, 0.15);
-    }
-
-    .project-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-      line-height: 1.3;
-    }
-
-    .project-desc {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      margin-bottom: 16px;
-    }
-
-    .card-footer {
+    .comment-form {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 10px;
-      border-top: 1px solid var(--border-color);
+      gap: 8px;
+      margin-top: 10px;
     }
-
-    .post-time {
-      font-size: 0.75rem;
-      color: var(--text-muted);
+    .comment-form input {
+      flex: 1;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      padding: 8px;
+      color: #fff;
+      border-radius: 6px;
+      font-size: 0.85rem;
     }
-
-    .btn-connect {
-      background: transparent;
-      border: 1px solid var(--accent-green);
-      color: var(--accent-green);
-      padding: 5px 12px;
-      border-radius: 12px;
-      font-size: 0.78rem;
-      font-weight: 600;
+    .comment-form button {
+      background: var(--accent);
+      border: none;
+      padding: 0 12px;
+      font-weight: bold;
+      border-radius: 6px;
       cursor: pointer;
+      font-size: 0.85rem;
     }
 
-    .btn-connect:hover {
-      background: var(--accent-green);
-      color: #000;
-    }
-
-    /* MODAL */
-    .modal-overlay {
+    /* Modales */
+    .modal {
       display: none;
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85);
-      z-index: 1000;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      z-index: 1000;
     }
-
     .modal-content {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 18px;
-      padding: 24px;
-      width: 100%;
-      max-width: 450px;
-      position: relative;
+      background: #181818;
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      border: 1px solid #333;
     }
-
-    .close-btn {
-      position: absolute;
-      top: 15px; right: 15px;
-      background: none; border: none;
-      color: var(--text-muted);
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-
-    .form-group {
-      margin-bottom: 14px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-bottom: 5px;
-    }
-
-    .form-group input, .form-group select, .form-group textarea {
+    .modal-content input, .modal-content select, .modal-content textarea {
       width: 100%;
       padding: 10px;
-      background: #08090b;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
+      margin-bottom: 15px;
+      background: #222;
+      border: 1px solid #444;
       color: #fff;
-      font-size: 0.85rem;
-      outline: none;
+      border-radius: 6px;
+      box-sizing: border-box;
     }
-
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-      border-color: var(--accent-green);
+    /* Chat Flotante */
+    #chatWidget {
+      display: none;
+      position: fixed;
+      bottom: 20px; right: 20px;
+      width: 350px; height: 450px;
+      background: #121212;
+      border: 1px solid #333;
+      border-radius: 12px;
+      flex-direction: column;
+      z-index: 1001;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
     }
-
-    .btn-submit {
-      width: 100%;
-      background: var(--accent-green);
-      color: #000;
-      font-weight: 800;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-size: 0.9rem;
-      margin-top: 8px;
+    .chat-header {
+      background: #1f1f1f; padding: 12px 15px; border-top-left-radius: 12px; border-top-right-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-weight: bold;
     }
+    .chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+    .message-bubble { max-width: 75%; padding: 10px; border-radius: 8px; font-size: 0.9rem; word-break: break-word; }
+    .message-bubble.incoming { background: #222; align-self: flex-start; }
+    .message-bubble.outgoing { background: #25d366; color: #000; align-self: flex-end; }
+    .chat-input-area { padding: 10px; background: #1f1f1f; display: flex; gap: 8px; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
+    .chat-input-area input { flex: 1; background: #2a2a2a; border: none; padding: 10px; color: #fff; border-radius: 6px; }
+    .chat-input-area button { background: var(--accent); border: none; padding: 0 15px; font-weight: bold; border-radius: 6px; cursor: pointer; }
   </style>
 </head>
 <body>
 
   <header>
     <div class="logo">CoCreate<span>.</span></div>
-    <button class="btn-primary" onclick="toggleModal(true)">+ Publicar</button>
+    <button class="btn-publish" onclick="toggleModal('modalPublish', true)">+ Publicar</button>
   </header>
 
-  <section class="hero">
-    <div class="badge">⚡ La comunidad #1 para creadores independientes</div>
-    <h1>Crea.<br>Conecta.<br><span>Colabora.</span></h1>
-    <p>Encuentra editores, diseñadores, músicos o co-hosts para hacer crecer tus proyectos juntos.</p>
-    <button class="btn-primary" onclick="toggleModal(true)">Publicar mi proyecto -></button>
-  </section>
+  <div class="hero">
+    <h1>Crea. Conecta. <span>Colabora.</span></h1>
+    <p>Perfiles, videos de YouTube, chat privado y comentarios en comunidad.</p>
+  </div>
 
-  <section class="section-container">
-    <div class="filters-header">
-      <h2>Oportunidades <span>Activas</span></h2>
-    </div>
+  <div class="container" id="projectsGrid"></div>
 
-    <div class="filters">
-      <button class="filter-btn active" onclick="filterProjects('todos', this)">Todos</button>
-      <button class="filter-btn" onclick="filterProjects('cine', this)">Cine & Video</button>
-      <button class="filter-btn" onclick="filterProjects('musica', this)">Música</button>
-      <button class="filter-btn" onclick="filterProjects('gaming', this)">Gaming</button>
-      <button class="filter-btn" onclick="filterProjects('tecnologia', this)">Tech</button>
-    </div>
-
-    <div class="projects-grid" id="projectsGrid">
-      
-      <div class="project-card" data-category="cine">
-        <div>
-          <div class="card-top">
-            <div class="creator-info">
-              <div class="avatar">M</div>
-              <span class="creator-name">@mateo_vlogs</span>
-            </div>
-            <span class="category-badge">Cine & Video</span>
-          </div>
-          <h3 class="project-title">Busco Editor para Reels / Shorts</h3>
-          <p class="project-desc">Tengo canal de viajes. Busco un editor dinámico para cortar ritmos rápido. ¡Ofrezco créditos y participación!</p>
-        </div>
-        <div class="card-footer">
-          <span class="post-time">Hace 1 hora</span>
-          <button class="btn-connect" onclick="alert('Conectando con @mateo_vlogs')">Contactar</button>
-        </div>
-      </div>
-
-      <div class="project-card" data-category="musica">
-        <div>
-          <div class="card-top">
-            <div class="creator-info">
-              <div class="avatar" style="background:#00e5ff;">S</div>
-              <span class="creator-name">@sofia_beats</span>
-            </div>
-            <span class="category-badge">Música</span>
-          </div>
-          <h3 class="project-title">Productora busca Cantante Pop/Indie</h3>
-          <p class="project-desc">Tengo maquetas producidas en Ableton. Busco voz masculina o femenina para colaboraciones en Spotify.</p>
-        </div>
-        <div class="card-footer">
-          <span class="post-time">Hace 3 horas</span>
-          <button class="btn-connect" onclick="alert('Conectando con @sofia_beats')">Contactar</button>
-        </div>
-      </div>
-
-      <div class="project-card" data-category="gaming">
-        <div>
-          <div class="card-top">
-            <div class="creator-info">
-              <div class="avatar" style="background:#ff0055; color:#fff;">G</div>
-              <span class="creator-name">@gamer_zone</span>
-            </div>
-            <span class="category-badge">Gaming</span>
-          </div>
-          <h3 class="project-title">Co-host para Podcast de Videojuegos</h3>
-          <p class="project-desc">Buscamos un apasionado del gaming para grabar un podcast semanal en Twitch y Spotify.</p>
-        </div>
-        <div class="card-footer">
-          <span class="post-time">Hace 1 día</span>
-          <button class="btn-connect" onclick="alert('Conectando con @gamer_zone')">Contactar</button>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <div class="modal-overlay" id="modalForm">
+  <!-- Modal Publicar -->
+  <div id="modalPublish" class="modal">
     <div class="modal-content">
-      <button class="close-btn" onclick="toggleModal(false)">✕</button>
-      <h3 style="font-size: 1.2rem; font-weight: 800; margin-bottom: 4px;">Nuevo Proyecto</h3>
-      <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 16px;">Publica tu oferta para que otros creadores te contacten.</p>
-      
-      <form onsubmit="addNewProject(event)">
-        <div class="form-group">
-          <label>Tu Usuario / Red Social</label>
-          <input type="text" id="inputUser" placeholder="Ej. @tu_canal" required />
-        </div>
-        <div class="form-group">
-          <label>Título de la Colaboración</label>
-          <input type="text" id="inputTitle" placeholder="Ej. Busco diseñador de miniaturas" required />
-        </div>
-        <div class="form-group">
-          <label>Categoría</label>
-          <select id="inputCategory" required>
-            <option value="cine">Cine & Video</option>
-            <option value="musica">Música</option>
-            <option value="gaming">Gaming</option>
-            <option value="tecnologia">Tech</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Descripción corta</label>
-          <textarea id="inputDesc" rows="3" placeholder="Describe brevemente lo que buscas..." required></textarea>
-        </div>
-        <button type="submit" class="btn-submit">🚀 Publicar Ahora</button>
+      <h3>Crear Publicación</h3>
+      <form id="projectForm" onsubmit="submitProject(event)">
+        <input type="text" id="inputUser" placeholder="Tu usuario o canal (ej: @tu_nombre)" required>
+        <input type="text" id="inputAvatar" placeholder="URL de tu foto de perfil (Imagen)" required>
+        <input type="text" id="inputBanner" placeholder="URL de tu imagen de Banner" required>
+        <textarea id="inputBio" placeholder="Breve biografía..." rows="2" required></textarea>
+        <hr style="border-color:#333; margin:15px 0;">
+        <input type="text" id="inputTitle" placeholder="Título de tu proyecto o búsqueda" required>
+        <input type="text" id="inputVideo" placeholder="Link de YouTube (ej: https://youtube.com/watch?v=...)">
+        <select id="inputCategory">
+          <option value="Cine & Video">Cine & Video</option>
+          <option value="Música">Música</option>
+          <option value="Gaming">Gaming</option>
+          <option value="Tech">Tech</option>
+        </select>
+        <textarea id="inputDesc" placeholder="Describe los detalles..." rows="3" required></textarea>
+        <button type="submit" class="btn-publish" style="width:100%;">Publicar</button>
+        <button type="button" onclick="toggleModal('modalPublish', false)" style="background:none; border:none; color:#aaa; width:100%; margin-top:10px; cursor:pointer;">Cancelar</button>
       </form>
     </div>
   </div>
 
+  <!-- Modal Calificar -->
+  <div id="modalRate" class="modal">
+    <div class="modal-content">
+      <h3 id="rateTitle">Calificar a Usuario</h3>
+      <form onsubmit="submitRating(event)">
+        <select id="inputStars">
+          <option value="5">⭐⭐⭐⭐⭐ (5 Estrellas)</option>
+          <option value="4">⭐⭐⭐⭐ (4 Estrellas)</option>
+          <option value="3">⭐⭐⭐ (3 Estrellas)</option>
+          <option value="2">⭐⭐ (2 Estrellas)</option>
+          <option value="1">⭐ (1 Estrella)</option>
+        </select>
+        <button type="submit" class="btn-action" style="width:100%; background:var(--accent); color:#000; border:none; padding:10px; margin-top:10px; font-weight:bold;">Enviar Calificación</button>
+        <button type="button" onclick="toggleModal('modalRate', false)" style="background:none; border:none; color:#aaa; width:100%; margin-top:10px; cursor:pointer;">Cancelar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Chat -->
+  <div id="chatWidget">
+    <div class="chat-header">
+      <span id="chatHeaderTitle">Chat</span>
+      <button onclick="closeChat()" style="background:none; border:none; color:#fff; cursor:pointer; font-size:1.2rem;">&times;</button>
+    </div>
+    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" placeholder="Escribe un mensaje..." onkeypress="if(event.key==='Enter') sendMessage()">
+      <button onclick="sendMessage()">Enviar</button>
+    </div>
+  </div>
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
-    function toggleModal(show) {
-      document.getElementById('modalForm').style.display = show ? 'flex' : 'none';
+    const SUPABASE_URL = 'https://nzbyrngkyzcswojuplqs.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_zQ0xEAPIznA06JoJjRuaQ_SZib1rJt';
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let currentTargetUser = '';
+
+    function toggleModal(modalId, show) {
+      document.getElementById(modalId).style.display = show ? 'flex' : 'none';
     }
 
-    function filterProjects(cat, btn) {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const cards = document.querySelectorAll('.project-card');
-      cards.forEach(card => {
-        if (cat === 'todos' || card.getAttribute('data-category') === cat) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
-      });
+    function openRateModal(user) {
+      currentTargetUser = user;
+      document.getElementById('rateTitle').innerText = `Calificar a ${user}`;
+      toggleModal('modalRate', true);
     }
 
-    function addNewProject(e) {
+    async function submitProject(e) {
       e.preventDefault();
-      
       const user = document.getElementById('inputUser').value;
+      const avatar = document.getElementById('inputAvatar').value;
+      const banner = document.getElementById('inputBanner').value;
+      const bio = document.getElementById('inputBio').value;
       const title = document.getElementById('inputTitle').value;
+      const video_link = document.getElementById('inputVideo').value;
       const category = document.getElementById('inputCategory').value;
       const desc = document.getElementById('inputDesc').value;
 
-      const categoryMap = {
-        'cine': 'Cine & Video',
-        'musica': 'Música',
-        'gaming': 'Gaming',
-        'tecnologia': 'Tech'
-      };
-
-      const initial = user.replace('@','').charAt(0).toUpperCase() || 'C';
-
-      const newCardHTML = `
-        <div class="project-card" data-category="${category}">
-          <div>
-            <div class="card-top">
-              <div class="creator-info">
-                <div class="avatar">${initial}</div>
-                <span class="creator-name">${user}</span>
-              </div>
-              <span class="category-badge">${categoryMap[category]}</span>
-            </div>
-            <h3 class="project-title">${title}</h3>
-            <p class="project-desc">${desc}</p>
-          </div>
-          <div class="card-footer">
-            <span class="post-time">Hace un momento</span>
-            <button class="btn-connect" onclick="alert('Conectando con ${user}')">Contactar</button>
-          </div>
-        </div>
-      `;
-
-      document.getElementById('projectsGrid').insertAdjacentHTML('afterbegin', newCardHTML);
-      toggleModal(false);
-      e.target.reset();
+      const { error } = await supabase.from('projects').insert([{ 
+        user, avatar, banner, bio, title, video_link, category, desc, points: 10, rating: 5 
+      }]);
+      
+      if (error) {
+        alert('Error al publicar: ' + error.message);
+      } else {
+        alert('¡Publicado con éxito!');
+        document.getElementById('projectForm').reset();
+        toggleModal('modalPublish', false);
+        loadProjects();
+      }
     }
-  // Asegúrate de usar tus claves reales de Supabase
-  const SUPABASE_URL = 'https://nzbyrngykzcswojuplqs.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_zQOxECKIznAO6JoJJIRuaQ_SZib1rJt';
-  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  async function submitProject(e) {
-  e.preventDefault();
+    async function submitRating(e) {
+      e.preventDefault();
+      const stars = parseInt(document.getElementById('inputStars').value);
+      const addedPoints = stars * 10;
+      const { data: proj } = await supabase.from('projects').select('*').eq('user', currentTargetUser).limit(1);
+      
+      if (proj && proj.length > 0) {
+        const newPoints = (proj[0].points || 0) + addedPoints;
+        const { error } = await supabase.from('projects').update({ points: newPoints, rating: stars }).eq('user', currentTargetUser);
+        if (!error) {
+          alert(`¡Calificación enviada! +${addedPoints} puntos.`);
+          toggleModal('modalRate', false);
+          loadProjects();
+        }
+      }
+    }
 
-  const user = document.getElementById('inputUser').value;
-  const title = document.getElementById('inputTitle').value;
-  const category = document.getElementById('inputCategory').value;
-  const desc = document.getElementById('inputDesc').value;
+    async function deleteProject(id) {
+      if (confirm("¿Estás seguro de reportar y eliminar esta publicación?")) {
+        const { error } = await supabase.from('projects').delete().eq('id', id);
+        if (!error) {
+          alert("Publicación eliminada por reporte.");
+          loadProjects();
+        } else {
+          alert("Error al eliminar: " + error.message);
+        }
+      }
+    }
 
-  const { data, error } = await supabase
-    .from('projects')
-    .insert([{ title, category, desc, user }]);
-  
-  if (error) {
-    alert('Error al publicar: ' + error.message);
-  } else {
-    alert('¡Proyecto publicado con éxito!');
-    document.getElementById('inputUser').value = '';
-    document.getElementById('inputTitle').value = '';
-    document.getElementById('inputDesc').value = '';
-    toggleModal(false);
-    location.reload(); // Recarga para mostrar la tarjeta nueva
-  }
-  }
-    
-</script>
-  
+    async function addComment(projectId) {
+      const input = document.getElementById(`commentInput-${projectId}`);
+      const text = input.value.trim();
+      if (!text) return;
+
+      const { error } = await supabase.from('comments').insert([{ project_id: projectId, text, author: 'Usuario' }]);
+      if (!error) {
+        input.value = '';
+        loadProjects();
+      }
+    }
+
+    async function loadProjects() {
+      const { data: projects, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
+      const { data: comments } = await supabase.from('comments').select('*');
+
+      if (!error && projects) {
+        const grid = document.getElementById('projectsGrid');
+        grid.innerHTML = '';
+        projects.forEach(p => {
+          const userPoints = p.points || 10;
+          const userRating = '⭐'.repeat(p.rating || 5);
+          const bannerUrl = p.banner || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600';
+          const avatarUrl = p.avatar || 'https://api.dicebear.com/7.x/bottts/svg?seed=' + p.user;
+
+          // Procesar Video de YouTube
+          let videoEmbed = '';
+          if (p.video_link) {
+            let videoId = '';
+            if (p.video_link.includes('v=')) {
+              videoId = p.video_link.split('v=')[1].split('&')[0];
+            } else if (p.video_link.includes('youtu.be/')) {
+              videoId = p.video_link.split('youtu.be/')[1].split('?')[0];
+            }
+            if (videoId) {
+              videoEmbed = `<iframe width="100%" height="220" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen style="border-radius:8px; margin-top:10px;"></iframe>`;
+            }
+          }
+
+          // Filtrar comentarios de este proyecto
+          const projectComments = comments ? comments.filter(c => c.project_id === p.id) : [];
+          let commentsHtml = '';
+          projectComments.forEach(c => {
+            commentsHtml += `<div class="comment-item"><b>${c.author}:</b> ${c.text}</div>`;
+          });
+
+          grid.innerHTML += `
+            <div class="project-card">
+              <div class="card-banner" style="background-image: url('${bannerUrl}');"></div>
+              <div class="card-body">
+                <div class="card-profile-row">
+                  <img src="${avatarUrl}" class="card-avatar">
+                  <div>
+                    <div style="font-weight:bold; font-size:1.1rem; color:var(--text);">${p.user}</div>
+                    <div style="font-size:0.8rem; color:#aaa;">${p.bio || 'Creador'}</div>
+                  </div>
+                  <div style="margin-left:auto; text-align:right;">
+                    <span style="font-size:0.85rem; background:#222; padding:3px 8px; border-radius:6px; color:#ffaa00;">${userRating} (${userPoints} pts)</span>
+                  </div>
+                </div>
+                <span style="background:#1a1a1a; border:1px solid #333; padding:2px 8px; font-size:0.75rem; border-radius:4px; color:#aaa;">${p.category}</span>
+                <h3 style="margin:10px 0 5px 0;">${p.title}</h3>
+                ${videoEmbed}
+                <p style="color:#aaa; font-size:0.9rem; margin-top:10px;">${p.desc}</p>
+                
+                <div class="card-actions">
+                  <button class="btn-action" onclick="openChat('${p.user}')">Contactar Chat</button>
+                  <button class="btn-action rate" onclick="openRateModal('${p.user}')">⭐ Calificar</button>
+                  <button class="btn-action report" onclick="deleteProject(${p.id})">Reportar / Borrar</button>
+                </div>
+
+                <!-- Sección de Comentarios -->
+                <div class="comments-section">
+                  <div style="font-size:0.85rem; font-weight:bold; margin-bottom:5px; color:#ccc;">Comentarios:</div>
+                  <div id="commentsList-${p.id}">
+                    ${commentsHtml || '<div style="font-size:0.8rem; color:#666;">No hay comentarios aún. ¡Sé el primero!</div>'}
+                  </div>
+                  <div class="comment-form">
+                    <input type="text" id="commentInput-${p.id}" placeholder="Escribe un comentario..." onkeypress="if(event.key==='Enter') addComment(${p.id})">
+                    <button onclick="addComment(${p.id})">Comentar</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          `;
+        });
+      }
+    }
+
+    // Chat
+    let activeChatUser = '';
+    function openChat(user) {
+      activeChatUser = user;
+      document.getElementById('chatHeaderTitle').innerText = `Chat con ${user}`;
+      document.getElementById('chatWidget').style.display = 'flex';
+      loadMessages();
+    }
+    function closeChat() { document.getElementById('chatWidget').style.display = 'none'; }
+
+    async function loadMessages() {
+      const { data, error } = await supabase.from('messages').select('*').order('created_at', { ascending: true });
+      const container = document.getElementById('chatMessages');
+      container.innerHTML = '';
+      if (!error && data) {
+        data.forEach(m => {
+          const isMe = m.sender === 'Tú';
+          container.innerHTML += `
+            <div class="message-bubble ${isMe ? 'outgoing' : 'incoming'}">
+              <div style="font-size:0.7rem; opacity:0.7;">${m.sender}</div>
+              ${m.text}
+            </div>
+          `;
+        });
+        container.scrollTop = container.scrollHeight;
+      }
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+      const { error } = await supabase.from('messages').insert([{ sender: 'Tú', text, recipient: activeChatUser }]);
+      if (!error) {
+        input.value = '';
+        loadMessages();
+      }
+    }
+
+    loadProjects();
+  </script>
 </body>
 </html>
